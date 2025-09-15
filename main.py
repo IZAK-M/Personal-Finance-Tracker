@@ -7,6 +7,7 @@ from data_entry import get_montant, get_description, get_categorie, get_date
 class CSV:
     CSV_FILE = "finance_data.csv"
     COLUMNS = ["date", "montant", "categorie", "description"]
+    FORMAT = "%Y-%m-%d"
 
     @classmethod
     def initialize_csv(cls):
@@ -25,6 +26,24 @@ class CSV:
             writer = csv.DictWriter(csvfile, fieldnames=cls.COLUMNS)
             writer.writerow(new_entry)
         print("Donées ajoutées avec succès")
+
+    @classmethod
+    def get_transactions(cls, start_date, end_date):
+        df = pd.read(cls.CSV_FILE)
+        df["date"] = pd.to_datetime(df["date"], format=CSV.FORMAT)
+        start_date = datetime.strftime(start_date, CSV.FORMAT)
+        end_date = datetime.strftime(end_date, CSV.FORMAT)
+
+        mask = (df["date"] >= start_date) & (df["date"] <= end_date)
+
+        filtered_df = df.loc[mask]
+
+        if filtered_df.empty:
+            print("Aucune transaction trouvée dans la plage des dates données")
+        else:
+            print("OK")
+
+
 
 
 def add():
