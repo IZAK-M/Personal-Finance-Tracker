@@ -41,7 +41,20 @@ class CSV:
         if filtered_df.empty:
             print("Aucune transaction trouvée dans la plage des dates données")
         else:
-            print("OK")
+            print(f"Transaction de {start_date.strftime(CSV.FORMAT)} à {end_date.strftime(CSV.FORMAT)}")
+            print(filtered_df.to_string(index = False, formatters={"date": lambda x: x.strftime(CSV.FORMAT)}))
+
+            total_income = filtered_df[filtered_df["category"]=="Revenus"]["montant"].sum()
+            total_expense = filtered_df[filtered_df["category"]=="Dépenses"]["montant"].sum()
+
+            print("\nRésumé:")
+            print(f"Revenu total : €{total_income:.2f}")
+            print(f"Dépenses total : €{total_expense:.2f}")
+            print(f"Économies nettes : €{(total_income - total_expense):.2f}")
+
+        return filtered_df
+
+            
 
 
 
