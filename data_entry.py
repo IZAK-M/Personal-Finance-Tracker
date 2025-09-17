@@ -9,7 +9,7 @@ def get_date(prompt, allow_default=False):
     if allow_default and not date_str:
         return datetime.today().strftime(date_format)
     try:
-        valid_date = datetime.strftime(date_str, date_format)
+        valid_date = datetime.strptime(date_str, date_format)
         return valid_date.strftime(date_format)
     except ValueError:
         print(
